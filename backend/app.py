@@ -9,6 +9,7 @@ from flask_wtf import CSRFProtect
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from firebase_admin import credentials, initialize_app, _apps
+from flask import send_from_directory
 
 # -----------------------
 # Add /backend and /root to Python path
@@ -151,6 +152,10 @@ def not_found(e):
 @app.errorhandler(500)
 def server_error(e):
     return "500 - Internal Server Error", 500
+
+@app.route('/sw.js')
+def service_worker():
+    return send_from_directory(os.path.join(os.path.dirname(__file__), '../static'), 'sw.js')
 
 # -----------------------
 # Run Flask app
