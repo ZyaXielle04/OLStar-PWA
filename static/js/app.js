@@ -155,4 +155,31 @@ document.addEventListener("DOMContentLoaded", () => {
           });
       });
   }
+
+  // ---------------------------
+  // PWA Install Button
+  // ---------------------------
+  let deferredPrompt;
+  const installBtn = document.getElementById("installBtn");
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault(); // Prevent automatic prompt
+    deferredPrompt = e;
+
+    // Show the install button
+    if (installBtn) installBtn.style.display = 'inline-block';
+  });
+
+  installBtn?.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User response to install: ${outcome}`);
+      deferredPrompt = null;
+
+      // Hide the button after prompt
+      installBtn.style.display = 'none';
+    }
+  });
+
 });
